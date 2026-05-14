@@ -978,19 +978,40 @@ footer {
 
 <!-- ████ SCRIPTS ████ -->
 <script>
-// ── CURSOR ──
+// ── CURSOR OPTIMIZADO (Con requestAnimationFrame) ──
 const cur = document.getElementById('cursor');
 const ring = document.getElementById('cursor-ring');
-let mx=0,my=0;
-document.addEventListener('mousemove',e=>{
-  mx=e.clientX; my=e.clientY;
-  cur.style.left=mx+'px'; cur.style.top=my+'px';
-  setTimeout(()=>{ ring.style.left=mx+'px'; ring.style.top=my+'px'; },80);
-});
-document.querySelectorAll('a,button,.sdot').forEach(el=>{
-  el.addEventListener('mouseenter',()=>cur.classList.add('hover'));
-  el.addEventListener('mouseleave',()=>cur.classList.remove('hover'));
-});
+
+if (window.matchMedia("(pointer: fine)").matches) {
+  let mouseX = 0;
+  let mouseY = 0;
+  let isMoving = false;
+
+  document.addEventListener('mousemove', e => {
+    mouseX = e.clientX;
+    mouseY = e.clientY;
+    
+    // Solo pedimos un frame si no hay otro en cola
+    if (!isMoving) {
+      window.requestAnimationFrame(() => {
+        cur.style.transform = `translate3d(${mouseX}px, ${mouseY}px, 0) translate(-50%, -50%)`;
+        setTimeout(() => { 
+          ring.style.transform = `translate3d(${mouseX}px, ${mouseY}px, 0) translate(-50%, -50%)`; 
+        }, 80);
+        isMoving = false;
+      });
+      isMoving = true;
+    }
+  });
+  
+  document.querySelectorAll('a, button, .btn, .sdot, #nav-pill').forEach(el => {
+    el.addEventListener('mouseenter', () => cur.classList.add('hover'));
+    el.addEventListener('mouseleave', () => cur.classList.remove('hover'));
+  });
+} else {
+  cur.style.display = 'none';
+  ring.style.display = 'none';
+}
 
 // ── HUD TIME ──
 function updateTime(){
