@@ -32,4 +32,4 @@ Al ser una demo técnica basada en estándares puros, no requiere dependencias.
 2. Ejecutar index.html en cualquier navegador moderno con soporte WebGL.
 
 ---
-*Hecho por [geuguis](https://github.com/geuguis) para José Luis.*
+*Hecho por [geuguis](https://github.com/geuguis)
